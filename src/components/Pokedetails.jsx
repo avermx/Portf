@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
+import Shimmer2 from './Shimmer2';
 
 
 const Pokedetails = () => {
 
   const [Pokedata , setPokedata] = useState([]);
+  const [loading , setloading] = useState(false);
 
 const { id } = useParams()
  
   // console.log(id);
   
   const fetchData = async () => {
-
+    setloading(true)
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)  
     const data = await res.json();
     console.log(data);
     setPokedata(data)
+    setloading(false)
 
     // data.results.forEach(async (item) => {
     //   const res1 = await fetch(item.url);
@@ -35,11 +38,18 @@ const { id } = useParams()
         fetchData();
       }, []);
 
+      // if(Pokedata.length === 0){
+      //     return <Shimmer2/>
+      // }
 
   
    return(
 
       <>
+      { loading == true ? <Shimmer2/> : 
+      <>
+
+     
       <div className='w-full h-screen bg-red-800 capitalize p-4'>
       <h1 className='text-black text-center capitalize font-bold text-6xl '>{Pokedata.name}</h1>
       <div className='flex justify-center m-4 '>
@@ -52,6 +62,8 @@ const { id } = useParams()
         </div>
       </div>
       </div>
+      </>
+       }
       </>
   )
 
