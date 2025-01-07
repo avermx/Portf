@@ -106,11 +106,8 @@ const Pokecard = () => {
 
 
   const fetchData1 = async (e) => {
-    
-
     setpokemonName([])
 
-   
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${e}`);
     const data = await res.json();
    
@@ -219,11 +216,12 @@ const Pokecard = () => {
 
   return (
 
-    <>
+    <div >
 
 
       {loading == true ? <Shimmer /> : <>
-        <div className="flex justify-center bg-sky-500">
+      
+        <div className="flex justify-center  pt-10">
           <div>
             <input className="border rounded-lg py-0.5  " type="input" value={seach} onChange={(e) => setseach(e.target.value)} />
             {
@@ -272,11 +270,11 @@ const Pokecard = () => {
 
           </div>
         </div>
-        <div className=" p-7 flex flex-wrap bg-sky-500 justify-between" >
+        <div className=" p-9 flex flex-wrap  justify-evenly " >
           {
             pokemonName.map((item, index) => (
               <Link to={`/pokedetails/${item.id}`} key={index}>
-                <div className="p-3 m-3 border border-black bg-black rounded-3xl relative">
+                <div className="p-3 m-5 border box- border-black bg-black rounded-3xl relative">
                   <label className="absolute -top-0.5 -left-0.5 w-9 bg-gray-600 text-center rounded-r-xl">{item.id}</label>
                   <div className="w-[200px] bg-green-300 rounded-xl">
                     <img className="hover:scale-125 transition-all " src={item?.sprites?.other?.['official-artwork'].front_default} />
@@ -313,7 +311,7 @@ const Pokecard = () => {
 
               {Page.map((item, i) => (
 
-                <button key={i} className={`p-5 border rounded-lg ${item === currentButtonNo ? "bg-gray-500" : ""}`} onClick={() => handleclick(i, item)}>
+                <button key={i} className={`p-5 border rounded-lg ${item === currentButtonNo ? "bg-gray-300" : ""}`} onClick={() => handleclick(i, item)}>
                   {item}
                 </button>
 
@@ -326,7 +324,7 @@ const Pokecard = () => {
         }
       </>
       }
-    </>
+    </div>
   );
 
 };
