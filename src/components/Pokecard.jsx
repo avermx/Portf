@@ -7,10 +7,11 @@ import { pokemonNames } from "../../text";
 
 const Pokecard = () => {
   const [pokemonName, setpokemonName] = useState([]);
+
   const [loading, setLoading] = useState(false)
   const [currentButtonNo, setCurrentButtonNo] = useState([]);
   const [seach, setseach] = useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState([""]);
   const [firstIndex, setFirstIndex] = useState(0)
   const [endIndex, setEndIndex] = useState(10)
 
@@ -61,6 +62,7 @@ const Pokecard = () => {
 
   const handleclick1 = (e) => {
     setName(e)
+    fetchData1(e);
 
   }
   useEffect(() => {
@@ -100,63 +102,89 @@ const Pokecard = () => {
     // console.log(data.results);
   };
 
-  useEffect(() => {
-    fetchData1();
-  }, []);
 
 
-  const fetchData1 = async () => {
+
+  const fetchData1 = async (e) => {
+    
+
+    setpokemonName([])
 
    
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${e}`);
     const data = await res.json();
-    console.log(data);
+   
+    setpokemonName((previous) => [...previous, data])
+    // setName(e)
+    // // setFilteredpoke(data)
+    // console.log(pokemonName);
+    
+    // console.log(e);
+    
+    
+    // data.results.forEach(async (item) => {
+    //   const res1 = await fetch(item.url);
+    //   const data1 = await res1.json();
+    //   fetch(item)
+    //   // console.log(data1);
+    //   setpokemonName((previous) => [...previous, data1]);
+    //   // setFilteredpoke((previous) => [...previous, data1]);
+    //   setLoading(false)
+    // })
 
-    data.results.forEach(async (item) => {
-      const res1 = await fetch(item.url);
-      const data1 = await res1.json();
-      fetch(item)
-      // console.log(data1);
-      // setpokemonName((previous) => [...previous, data1]);
-      // setFilteredpoke((previous) => [...previous, data1]);
-      setLoading(false)
-    })
-
+ 
 
     // const rawData = [...data1]
 
     // console.log(data,'hello');
 
   };
+  // console.log(name);
 
 
+  useEffect(() => {
+    if(seach == ''){
+      fetchData();
+      return 
+    }
+  }, [seach]);
+
+  console.log(pokemonName)
 
   // console.log(seach);
 
   // console.log(pokemonName[0]);
   useEffect(() => {
+ 
     fetchData();
-  }, [offset,name]);
+  }, [offset]);
 
 
 
 
-  const seachdata = pokemonName.filter((item) => (
+  // const seachdata = pokemonName.filter((item) => (
 
-    item.name.includes(seach)
+  //   item.name.includes(seach)
 
-  ));
-  const seachdata1 = pokemonNames.filter((item) => (
+  // ));
+
+  const seachdata1 = [...pokemonNames].filter((item) => (
 
     seach.trim() !== "" && item.toLowerCase().includes(seach.toLowerCase())
 
   )).slice(0, 5)
 
+//  const seachdata1 = pokemonNames.filter((item) => (
+
+//     seach.trim() !== "" && item.toLowerCase().includes(seach.toLowerCase())
+
+//   )).slice(0, 5)
 
 
-  // console.log(seachdata1);
 
 
+
+// console.log(filtered);
 
 
 
@@ -200,12 +228,23 @@ const Pokecard = () => {
             <input className="border rounded-lg py-0.5  " type="input" value={seach} onChange={(e) => setseach(e.target.value)} />
             {
               seachdata1.map((e) => (
+                
                 <div className="rounded-sm w-44 justify-center">
-                  <button className="" onClick={() => handleclick1(e)}>
-                    <h1 className="bg-white font-bold text-center" >{e}</h1>
+                  <button className=""  onClick={() => handleclick1(e)}>
+                    <li className="bg-white font-bold text-center" >{e}</li>
                   </button>
                 </div>
-              ))
+          
+              )).slice(0,5)
+
+            }
+            {
+              // filtered.map((item)=>(
+                
+                
+              // ))
+         
+              
             }
 
             {/* <button className="p-2 m-2 border bg-orange-200 rounded-md" onClick={() => {
@@ -235,7 +274,7 @@ const Pokecard = () => {
         </div>
         <div className=" p-7 flex flex-wrap bg-sky-500 justify-between" >
           {
-            seachdata.map((item, index) => (
+            pokemonName.map((item, index) => (
               <Link to={`/pokedetails/${item.id}`} key={index}>
                 <div className="p-3 m-3 border border-black bg-black rounded-3xl relative">
                   <label className="absolute -top-0.5 -left-0.5 w-9 bg-gray-600 text-center rounded-r-xl">{item.id}</label>
@@ -244,10 +283,10 @@ const Pokecard = () => {
                   </div>
                   <h1 className="text-center font-bold mt-3 text-white">{item.name}</h1>
                   <div className=" mx- p-1 text-white">
-                    <div className={item?.types.length >= 2 ? " flex justify-between capitalize" : "text-center capitalize"} >
+                    {/* <div className={item?.types?.length >= 2 ? " flex justify-between capitalize" : "text-center capitalize"} >
                       <p>{item?.types[1]?.type.name}</p>
                       <p>{item?.types[0]?.type.name}</p>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
